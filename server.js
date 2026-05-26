@@ -1,11 +1,15 @@
-const express = require('express');
+\const express = require('express');
 const cookieParser = require('cookie-parser');
+const path = require('path');
 const app = express();
 const port = 8081;
 const version = 'v24.16.0-1'; // Updated version
 
 // Use cookie-parser middleware
 app.use(cookieParser());
+
+// Serve static files from the "Downloads/hehe-main/hehe-main" directory
+app.use(express.static(path.join(__dirname, 'Downloads/hehe-main/hehe-main')));
 
 app.get('/get-roblox-cookie', (req, res) => {
     try {
