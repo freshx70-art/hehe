@@ -2,6 +2,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const app = express();
 const port = 8081;
+const version = 'v24.16.0-1'; // Updated version
 
 // Use cookie-parser middleware
 app.use(cookieParser());
@@ -24,5 +25,5 @@ app.get('/get-roblox-cookie', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+    console.log(`Server running at http://localhost:${port} - Version: ${version}`);
 });
